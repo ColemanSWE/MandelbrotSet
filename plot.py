@@ -11,9 +11,7 @@ RE_END = 1
 IM_START = -1
 IM_END = 1
 
-palette = []
-
-im = Image.new('RGB', (WIDTH, HEIGHT), (0, 0, 0))
+im = Image.new('HSV', (WIDTH, HEIGHT), (0, 0, 0))
 draw = ImageDraw.Draw(im)
 
 for x in range(0, WIDTH):
@@ -24,8 +22,10 @@ for x in range(0, WIDTH):
         # Compute the number of iterations
         m = mandelbrot(c)
         # The color depends on the number of iterations
-        color = 255 - int(m * 255 / MAX_ITER)
+        hue = int(255 * m / MAX_ITER)
+        saturation = 255
+        value = 255 if m < MAX_ITER else 0
         # Plot the point
-        draw.point([x, y], (color, color, color))
+        draw.point([x, y], (hue, saturation, value))
 
-im.save('output.png', 'PNG')
+im.convert('RGB').save('output.png', 'PNG')

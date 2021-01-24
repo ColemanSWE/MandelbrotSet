@@ -14,7 +14,5 @@ According to the [Wikipedia](https://en.wikipedia.org/wiki/Mandelbrot_set) artic
 - the complex plan <==> the image
 - for each pixel of coordinate (i, j) in the image, using the previous recurrence relation test if it is bounded
 
-To implement this condition for our computers (quote from [Introduction to Programming in Java book](http://introcs.cs.princeton.edu/java/32class/)) :
-
 > Given a complex point, we can compute the terms at the beginning of its sequence, but may not be able to know for sure that the sequence remains bounded.
 > Remarkably, there is a test that tells us for sure that a point is not in the set: if the magnitude of any number in the sequence ever gets to be greater than 2 (like 3 + 0i), then the sequence will surely diverge.

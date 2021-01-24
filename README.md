@@ -1,5 +1,7 @@
 # MandelbrotSet
 
+Basic implementation of the Mandelbrot set in Python 3. This example uses Pillow for drawing the image.
+
 ## Detailed description
 
 ### Mandelbrot set

@@ -13,4 +13,5 @@ def mandelbrot(c):
     if n == MAX_ITER:
         return MAX_ITER
 
+    # Changed to use log() functions using fractional escape count.
     return n + 1 - log(log2(abs(z)))

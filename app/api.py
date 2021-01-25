@@ -78,6 +78,7 @@ def mandelbrot_end(min_c_re, min_c_im, max_c_re, max_c_im, x, y, inf_n):
             # Plot the point
             draw.point([x, y], (hue, saturation, value))
 
+    # Some voodoo that serves the picture as a response in Flask.
     im.convert('RGB').save('output.png', 'PNG')
     tempFileObj = NamedTemporaryFile(mode='w+b', suffix='png')
     pillImage = open('output.png', 'rb')

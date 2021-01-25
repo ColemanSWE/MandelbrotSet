@@ -3,7 +3,7 @@ from PIL import Image, ImageDraw
 from collections import defaultdict
 from math import floor, ceil
 
-from mandelbrot import mandelbrot, MAX_ITER
+from mandelbrot import mandelbrot
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -13,18 +13,21 @@ def linear_interpolation(color1, color2, t):
     return color1 * (1 - t) + color2 * t
 
 
-@app.route('/', methods=['GET'])
-def home():
+@app.route('/mandelbrot/<min_c_re>/<min_c_im>/<max_c_re>/<max_c_im>/<x>/<y>/<inf_n>', methods=['GET'])
+def mandelbrot_end(min_c_re, min_c_im, max_c_re, max_c_im, x, y, inf_n):
 
     # Image size (pixels)
-    WIDTH = 600
-    HEIGHT = 400
+    WIDTH = x
+    HEIGHT = y
+
+    # Max number of iterations
+    max_iter = inf_n
 
     # Plot window
-    RE_START = -2
-    RE_END = 1
-    IM_START = -1
-    IM_END = 1
+    RE_START = min_c_re
+    RE_END = max_c_re
+    IM_START = min_c_im
+    IM_END = max_c_im
 
     histogram = defaultdict(lambda: 0)
     values = {}
@@ -37,13 +40,13 @@ def home():
             m = mandelbrot(c)
 
             values[(x, y)] = m
-            if m < MAX_ITER:
+            if m < max_iter:
                 histogram[floor(m)] += 1
 
     total = sum(histogram.values())
     hues = []
     h = 0
-    for i in range(MAX_ITER):
+    for i in range(max_iter):
         h += histogram[i] / total
         hues.append(h)
     hues.append(h)
@@ -59,7 +62,7 @@ def home():
                 int(255 *
                     linear_interpolation(hues[floor(m)], hues[ceil(m)], m % 1))
             saturation = 255
-            value = 255 if m < MAX_ITER else 0
+            value = 255 if m < max_iter else 0
             # Plot the point
             draw.point([x, y], (hue, saturation, value))
 

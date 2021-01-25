@@ -13,6 +13,11 @@ def linear_interpolation(color1, color2, t):
     return color1 * (1 - t) + color2 * t
 
 
+@app.route('/', methods=['GET'])
+def home():
+    return '<h1>home placeholder.</h1>'
+
+
 @app.route('/mandelbrot/<min_c_re>/<min_c_im>/<max_c_re>/<max_c_im>/<x>/<y>/<inf_n>', methods=['GET'])
 def mandelbrot_end(min_c_re, min_c_im, max_c_re, max_c_im, x, y, inf_n):
 

@@ -20,8 +20,8 @@ IM_END = 1
 
 histogram = defaultdict(lambda: 0)
 values = {}
-for x in range(0, WIDTH):
-    for y in range(0, HEIGHT):
+for x in range(0, int(WIDTH)):
+    for y in range(0, int(HEIGHT)):
         # Convert pixel coordinate to complex number
         c = complex(RE_START + (x / WIDTH) * (RE_END - RE_START),
                     IM_START + (y / HEIGHT) * (IM_END - IM_START))

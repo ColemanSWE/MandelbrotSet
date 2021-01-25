@@ -2,6 +2,9 @@ import flask
 from PIL import Image, ImageDraw
 from collections import defaultdict
 from math import floor, ceil
+from tempfile import NamedTemporaryFile
+from shutil import copyfileobj
+from os import remove
 
 from mandelbrot import mandelbrot
 
@@ -21,18 +24,22 @@ def home():
 @app.route('/mandelbrot/<min_c_re>/<min_c_im>/<max_c_re>/<max_c_im>/<x>/<y>/<inf_n>', methods=['GET'])
 def mandelbrot_end(min_c_re, min_c_im, max_c_re, max_c_im, x, y, inf_n):
 
+    # There's maybe a better way to do this than
+    # type-casting everything manually but this
+    # will work for now.
+
     # Image size (pixels)
-    WIDTH = x
-    HEIGHT = y
+    WIDTH = int(x)
+    HEIGHT = int(y)
 
     # Max number of iterations
-    max_iter = inf_n
+    max_iter = int(inf_n)
 
     # Plot window
-    RE_START = min_c_re
-    RE_END = max_c_re
-    IM_START = min_c_im
-    IM_END = max_c_im
+    RE_START = int(min_c_re)
+    RE_END = int(max_c_re)
+    IM_START = int(min_c_im)
+    IM_END = int(max_c_im)
 
     histogram = defaultdict(lambda: 0)
     values = {}
@@ -72,8 +79,15 @@ def mandelbrot_end(min_c_re, min_c_im, max_c_re, max_c_im, x, y, inf_n):
             draw.point([x, y], (hue, saturation, value))
 
     im.convert('RGB').save('output.png', 'PNG')
+    tempFileObj = NamedTemporaryFile(mode='w+b', suffix='png')
+    pillImage = open('output.png', 'rb')
+    copyfileobj(pillImage, tempFileObj)
+    pillImage.close()
+    remove('output.png')
+    tempFileObj.seek(0, 0)
 
-    return flask.send_file('output.png', mimetype='image/gif')
+    response = flask.send_file(tempFileObj, attachment_filename='output.png')
+    return response
 
 
 app.run()
